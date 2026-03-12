@@ -39,7 +39,8 @@ label {
     font-weight: bold;
 }
 
-input {
+input, 
+select{
     width: 100%;
     padding: 12px;
     border-radius: 8px;
@@ -49,7 +50,8 @@ input {
     box-sizing: border-box;
 }
 
-input:focus {
+input:focus,
+select:focus{
     outline: none;
     border-color: #2ecc71;
 }
@@ -74,4 +76,36 @@ button:hover {
 .result-card {
     line-height: 1.8;
     font-size: 18px;
+}
+.badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+.badge-green {
+    background: rgba(46, 204, 113, 0.18);
+    color: #2ecc71;
+}
+
+.badge-yellow {
+    background: rgba(241, 196, 15, 0.18);
+    color: #f1c40f;
+}
+
+.badge-red {
+    background: rgba(231, 76, 60, 0.18);
+    color: #e74c3c;
+}
+
+.badge-blue {
+    background: rgba(52, 152, 219, 0.18);
+    color: #3498db;
+}
+
+.result-row {
+    margin-bottom: 10px;
 }

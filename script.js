@@ -1,5 +1,5 @@
 function calculate() {
-    const carModel = document.getElementById("carModel").value;
+    const carModel = document.getElementById("carModel").value.trim();
     const year = document.getElementById("year").value;
     const mileage = parseFloat(document.getElementById("mileage").value);
     const damageType = document.getElementById("damageType").value;
@@ -29,25 +29,51 @@ function calculate() {
     const roi = (profit / totalInvestment) * 100;
 
     let dealRating = "";
+    let dealBadgeClass = "";
 
     if (roi >= 20) {
         dealRating = "Strong deal";
+        dealBadgeClass = "badge-green";
     } else if (roi >= 10) {
         dealRating = "Decent deal";
+        dealBadgeClass = "badge-yellow";
     } else if (roi >= 0) {
         dealRating = "Low-margin deal";
+        dealBadgeClass = "badge-blue";
     } else {
         dealRating = "Bad deal";
+        dealBadgeClass = "badge-red";
+    }
+
+    let riskLevel = "";
+    let riskBadgeClass = "";
+
+    if (damageType === "Flood" || damageType === "Biohazard") {
+        riskLevel = "High";
+        riskBadgeClass = "badge-red";
+    } else if (damageType === "Mechanical" || damageType === "Side Damage") {
+        riskLevel = "Medium";
+        riskBadgeClass = "badge-yellow";
+    } else {
+        riskLevel = "Low";
+        riskBadgeClass = "badge-green";
     }
 
     document.getElementById("result").innerHTML = `
-        <strong>Vehicle:</strong> ${year} ${carModel}<br>
-        <strong>Mileage:</strong> ${mileage.toLocaleString()} miles<br>
-        <strong>Damage Type:</strong> ${damageType}<br><br>
-
-        <strong>Total Investment:</strong> $${totalInvestment.toLocaleString()}<br>
-        <strong>Potential Profit:</strong> $${profit.toLocaleString()}<br>
-        <strong>ROI:</strong> ${roi.toFixed(2)}%<br>
-        <strong>Deal Rating:</strong> ${dealRating}
+        <div class="result-row"><strong>Vehicle:</strong> ${year} ${carModel}</div>
+        <div class="result-row"><strong>Mileage:</strong> ${mileage.toLocaleString()} miles</div>
+        <div class="result-row"><strong>Damage Type:</strong> ${damageType}</div>
+        <div class="result-row">
+            <strong>Risk Level:</strong>
+            <span class="badge ${riskBadgeClass}">${riskLevel}</span>
+        </div>
+        <br>
+        <div class="result-row"><strong>Total Investment:</strong> $${totalInvestment.toLocaleString()}</div>
+        <div class="result-row"><strong>Potential Profit:</strong> $${profit.toLocaleString()}</div>
+        <div class="result-row"><strong>ROI:</strong> ${roi.toFixed(2)}%</div>
+        <div class="result-row">
+            <strong>Deal Rating:</strong>
+            <span class="badge ${dealBadgeClass}">${dealRating}</span>
+        </div>
     `;
 }
