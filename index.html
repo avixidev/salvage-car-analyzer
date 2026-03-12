@@ -1,31 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salvage Car Analyzer</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <div class="container">
+        <h1>Salvage Car Analyzer</h1>
+        <p class="subtitle">Estimate profit and ROI for a salvage vehicle deal</p>
 
-<h1>Salvage Car Profit Calculator</h1>
+        <div class="form-card">
+            <label for="carModel">Car Model</label>
+            <input type="text" id="carModel" placeholder="e.g. Lexus IS350">
 
-<label>Auction Price ($)</label>
-<input type="number" id="auctionPrice">
+            <label for="year">Year</label>
+            <input type="number" id="year" placeholder="e.g. 2021">
 
-<label>Repair Cost ($)</label>
-<input type="number" id="repairCost">
+            <label for="mileage">Mileage</label>
+            <input type="number" id="mileage" placeholder="e.g. 42000">
 
-<label>Market Price ($)</label>
-<input type="number" id="marketPrice">
+            <label for="damageType">Damage Type</label>
+            <input type="text" id="damageType" placeholder="e.g. Front End">
 
-<label>Fees + Shipping ($)</label>
-<input type="number" id="fees">
+            <label for="auctionPrice">Auction Price ($)</label>
+            <input type="number" id="auctionPrice" placeholder="e.g. 14000">
 
-<button onclick="calculate()">Calculate</button>
+            <label for="repairCost">Repair Cost ($)</label>
+            <input type="number" id="repairCost" placeholder="e.g. 6000">
 
-<h2 id="result"></h2>
+            <label for="marketPrice">Market Price ($)</label>
+            <input type="number" id="marketPrice" placeholder="e.g. 27000">
 
-<script src="script.js"></script>
+            <label for="fees">Fees + Shipping ($)</label>
+            <input type="number" id="fees" placeholder="e.g. 2000">
 
+            <button onclick="calculate()">Analyze Deal</button>
+        </div>
+
+        <div class="result-card" id="result">
+            Your results will appear here.
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
