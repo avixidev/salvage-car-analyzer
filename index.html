@@ -22,17 +22,17 @@
             <input type="number" id="mileage" placeholder="e.g. 42000">
 
             <label for="damageType">Damage Type</label>
-<select id="damageType">
-    <option value="">Select damage type</option>
-    <option value="Front End">Front End</option>
-    <option value="Rear End">Rear End</option>
-    <option value="Side Damage">Side Damage</option>
-    <option value="Hail">Hail</option>
-    <option value="Flood">Flood</option>
-    <option value="Mechanical">Mechanical</option>
-    <option value="Biohazard">Biohazard</option>
-    <option value="Minor Dent/Scratches">Minor Dent/Scratches</option>
-</select>
+            <select id="damageType">
+                <option value="">Select damage type</option>
+                <option value="Front End">Front End</option>
+                <option value="Rear End">Rear End</option>
+                <option value="Side Damage">Side Damage</option>
+                <option value="Hail">Hail</option>
+                <option value="Flood">Flood</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Biohazard">Biohazard</option>
+                <option value="Minor Dent/Scratches">Minor Dent/Scratches</option>
+            </select>
 
             <label for="auctionPrice">Auction Price ($)</label>
             <input type="number" id="auctionPrice" placeholder="e.g. 14000">
@@ -51,6 +51,23 @@
 
         <div class="result-card" id="result">
             Your results will appear here.
+        </div>
+
+        <div class="history-card">
+            <h2>Analyzed Deals</h2>
+
+            <table id="historyTable">
+                <thead>
+                    <tr>
+                        <th>Car</th>
+                        <th>ROI</th>
+                        <th>Profit</th>
+                        <th>Risk</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
     </div>
 

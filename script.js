@@ -76,4 +76,15 @@ function calculate() {
             <span class="badge ${dealBadgeClass}">${dealRating}</span>
         </div>
     `;
+
+    const tableBody = document
+        .getElementById("historyTable")
+        .getElementsByTagName("tbody")[0];
+
+    const row = tableBody.insertRow();
+
+    row.insertCell(0).innerText = `${year} ${carModel}`;
+    row.insertCell(1).innerText = `${roi.toFixed(2)}%`;
+    row.insertCell(2).innerText = `$${profit.toLocaleString()}`;
+    row.insertCell(3).innerText = riskLevel;
 }

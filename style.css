@@ -109,3 +109,27 @@ button:hover {
 .result-row {
     margin-bottom: 10px;
 }
+.history-card {
+    background: #1a1f29;
+    border-radius: 14px;
+    padding: 24px;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th {
+    text-align: left;
+    padding: 10px;
+    color: #b0b7c3;
+    font-weight: normal;
+}
+
+td {
+    padding: 10px;
+    border-top: 1px solid #2a3240;
+}
