@@ -54,15 +54,24 @@
         </div>
 
         <div class="history-card">
-            <h2>Analyzed Deals</h2>
+   <div class="history-header">
+    <h2>Analyzed Deals</h2>
+    <button class="clear-btn" onclick="clearHistory()">Clear History</button>
+</div>
 
-            <table id="historyTable">
+<div class="sort-controls">
+    <button class="sort-btn" onclick="sortDealsByROI()">Sort by ROI</button>
+    <button class="sort-btn" onclick="sortDealsByProfit()">Sort by Profit</button>
+</div>
+
+    <table id="historyTable">
                 <thead>
                     <tr>
-                        <th>Car</th>
-                        <th>ROI</th>
-                        <th>Profit</th>
-                        <th>Risk</th>
+    <th>Car</th>
+    <th>ROI</th>
+    <th>Profit</th>
+    <th>Risk</th>
+    <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>

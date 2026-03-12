@@ -133,3 +133,66 @@ td {
     padding: 10px;
     border-top: 1px solid #2a3240;
 }
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.clear-btn {
+    width: auto;
+    margin-top: 0;
+    padding: 10px 16px;
+    background: #e74c3c;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.clear-btn:hover {
+    opacity: 0.95;
+}
+.sort-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    margin-bottom: 10px;
+}
+
+.sort-btn {
+    width: auto;
+    margin-top: 0;
+    padding: 10px 16px;
+    background: #3498db;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.sort-btn:hover {
+    opacity: 0.95;
+}
+
+.delete-btn {
+    width: auto;
+    margin-top: 0;
+    padding: 8px 12px;
+    background: #e74c3c;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    opacity: 0.95;
+}

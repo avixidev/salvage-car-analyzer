@@ -77,14 +77,87 @@ function calculate() {
         </div>
     `;
 
+    const deal = {
+        id: Date.now(),
+        car: `${year} ${carModel}`,
+        roi: roi,
+        profit: profit,
+        risk: riskLevel
+    };
+
+    saveDeal(deal);
+    renderDeals();
+}
+
+function getDeals() {
+    return JSON.parse(localStorage.getItem("deals")) || [];
+}
+
+function saveDeal(deal) {
+    const deals = getDeals();
+    deals.push(deal);
+    localStorage.setItem("deals", JSON.stringify(deals));
+}
+
+function renderDeals() {
     const tableBody = document
         .getElementById("historyTable")
         .getElementsByTagName("tbody")[0];
 
-    const row = tableBody.insertRow();
+    tableBody.innerHTML = "";
 
-    row.insertCell(0).innerText = `${year} ${carModel}`;
-    row.insertCell(1).innerText = `${roi.toFixed(2)}%`;
-    row.insertCell(2).innerText = `$${profit.toLocaleString()}`;
-    row.insertCell(3).innerText = riskLevel;
+    const deals = getDeals();
+
+    deals.forEach(function (deal) {
+        const row = tableBody.insertRow();
+
+        row.insertCell(0).innerText = deal.car;
+        row.insertCell(1).innerText = `${deal.roi.toFixed(2)}%`;
+        row.insertCell(2).innerText = `$${deal.profit.toLocaleString()}`;
+        row.insertCell(3).innerText = deal.risk;
+
+        const actionCell = row.insertCell(4);
+        actionCell.innerHTML = `<button class="delete-btn" onclick="deleteDeal(${deal.id})">Delete</button>`;
+    });
 }
+
+function deleteDeal(id) {
+    let deals = getDeals();
+    deals = deals.filter(function (deal) {
+        return deal.id !== id;
+    });
+
+    localStorage.setItem("deals", JSON.stringify(deals));
+    renderDeals();
+}
+
+function clearHistory() {
+    localStorage.removeItem("deals");
+    renderDeals();
+}
+
+function sortDealsByROI() {
+    const deals = getDeals();
+
+    deals.sort(function (a, b) {
+        return b.roi - a.roi;
+    });
+
+    localStorage.setItem("deals", JSON.stringify(deals));
+    renderDeals();
+}
+
+function sortDealsByProfit() {
+    const deals = getDeals();
+
+    deals.sort(function (a, b) {
+        return b.profit - a.profit;
+    });
+
+    localStorage.setItem("deals", JSON.stringify(deals));
+    renderDeals();
+}
+
+window.onload = function () {
+    renderDeals();
+};
