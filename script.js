@@ -1,3 +1,4 @@
+let profitChart;
 function calculate() {
     const carModel = document.getElementById("carModel").value.trim();
     const year = document.getElementById("year").value;
@@ -78,12 +79,21 @@ function calculate() {
     `;
 
     const deal = {
-        id: Date.now(),
-        car: `${year} ${carModel}`,
-        roi: roi,
-        profit: profit,
-        risk: riskLevel
-    };
+    id: Date.now(),
+    carModel: carModel,
+    year: year,
+    mileage: mileage,
+    damageType: damageType,
+    auction: auction,
+    repair: repair,
+    market: market,
+    fees: fees,
+    car: `${year} ${carModel}`,
+    roi: roi,
+    profit: profit,
+    risk: riskLevel
+};
+    
 
     saveDeal(deal);
     renderDeals();
@@ -117,8 +127,14 @@ function renderDeals() {
         row.insertCell(3).innerText = deal.risk;
 
         const actionCell = row.insertCell(4);
-        actionCell.innerHTML = `<button class="delete-btn" onclick="deleteDeal(${deal.id})">Delete</button>`;
+        actionCell.innerHTML = `
+            <button class="sort-btn" onclick="editDeal(${deal.id})">Edit</button>
+            <button class="delete-btn" onclick="deleteDeal(${deal.id})">Delete</button>
+        `;
     });
+
+    updateAnalytics();
+    renderProfitChart();
 }
 
 function deleteDeal(id) {
@@ -161,3 +177,35 @@ function sortDealsByProfit() {
 window.onload = function () {
     renderDeals();
 };
+function editDeal(id) {
+    let deals = getDeals();
+
+    const dealToEdit = deals.find(function (deal) {
+        return deal.id === id;
+    });
+
+    if (!dealToEdit) {
+        return;
+    }
+
+    document.getElementById("carModel").value = dealToEdit.carModel || "";
+    document.getElementById("year").value = dealToEdit.year || "";
+    document.getElementById("mileage").value = dealToEdit.mileage || "";
+    document.getElementById("damageType").value = dealToEdit.damageType || "";
+    document.getElementById("auctionPrice").value = dealToEdit.auction || "";
+    document.getElementById("repairCost").value = dealToEdit.repair || "";
+    document.getElementById("marketPrice").value = dealToEdit.market || "";
+    document.getElementById("fees").value = dealToEdit.fees || "";
+
+    deals = deals.filter(function (deal) {
+        return deal.id !== id;
+    });
+
+    localStorage.setItem("deals", JSON.stringify(deals));
+    renderDeals();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
