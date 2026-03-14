@@ -1,4 +1,5 @@
 let profitChart;
+
 function calculate() {
     const carModel = document.getElementById("carModel").value.trim();
     const year = document.getElementById("year").value;
@@ -79,21 +80,20 @@ function calculate() {
     `;
 
     const deal = {
-    id: Date.now(),
-    carModel: carModel,
-    year: year,
-    mileage: mileage,
-    damageType: damageType,
-    auction: auction,
-    repair: repair,
-    market: market,
-    fees: fees,
-    car: `${year} ${carModel}`,
-    roi: roi,
-    profit: profit,
-    risk: riskLevel
-};
-    
+        id: Date.now(),
+        carModel: carModel,
+        year: year,
+        mileage: mileage,
+        damageType: damageType,
+        auction: auction,
+        repair: repair,
+        market: market,
+        fees: fees,
+        car: `${year} ${carModel}`,
+        roi: roi,
+        profit: profit,
+        risk: riskLevel
+    };
 
     saveDeal(deal);
     renderDeals();
@@ -174,9 +174,6 @@ function sortDealsByProfit() {
     renderDeals();
 }
 
-window.onload = function () {
-    renderDeals();
-};
 function editDeal(id) {
     let deals = getDeals();
 
@@ -208,4 +205,175 @@ function editDeal(id) {
         top: 0,
         behavior: "smooth"
     });
+}
+
+function updateAnalytics() {
+    const deals = getDeals();
+
+    const totalDeals = deals.length;
+
+    const averageROI =
+        totalDeals > 0
+            ? deals.reduce(function (sum, deal) {
+                  return sum + deal.roi;
+              }, 0) / totalDeals
+            : 0;
+
+    const bestProfit =
+        totalDeals > 0
+            ? Math.max(...deals.map(function (deal) {
+                  return deal.profit;
+              }))
+            : 0;
+
+    const worstProfit =
+        totalDeals > 0
+            ? Math.min(...deals.map(function (deal) {
+                  return deal.profit;
+              }))
+            : 0;
+
+    document.getElementById("totalDeals").innerText = totalDeals;
+    document.getElementById("averageROI").innerText = `${averageROI.toFixed(2)}%`;
+    document.getElementById("bestProfit").innerText = `$${bestProfit.toLocaleString()}`;
+    document.getElementById("worstProfit").innerText = `$${worstProfit.toLocaleString()}`;
+}
+
+function renderProfitChart() {
+    const deals = getDeals();
+
+    const labels = deals.map(function (deal) {
+        return deal.car;
+    });
+
+    const profits = deals.map(function (deal) {
+        return deal.profit;
+    });
+
+    const barColors = profits.map(function (profit) {
+        if (profit > 0) {
+            return "rgba(46, 204, 113, 0.75)";
+        } else if (profit < 0) {
+            return "rgba(231, 76, 60, 0.75)";
+        } else {
+            return "rgba(52, 152, 219, 0.75)";
+        }
+    });
+
+    const borderColors = profits.map(function (profit) {
+        if (profit > 0) {
+            return "#2ecc71";
+        } else if (profit < 0) {
+            return "#e74c3c";
+        } else {
+            return "#3498db";
+        }
+    });
+
+    const ctx = document.getElementById("profitChart").getContext("2d");
+
+    if (profitChart) {
+        profitChart.destroy();
+    }
+
+    profitChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Profit",
+                    data: profits,
+                    backgroundColor: barColors,
+                    borderColor: borderColors,
+                    borderWidth: 1.5,
+                    borderRadius: 8
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: "#cbd5e1"
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: "#cbd5e1"
+                    },
+                    grid: {
+                        color: "rgba(255,255,255,0.08)"
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: "#cbd5e1"
+                    },
+                    grid: {
+                        color: "rgba(255,255,255,0.08)"
+                    }
+                }
+            }
+        }
+    });
+}
+
+window.onload = function () {
+    renderDeals();
+};
+async function decodeVIN() {
+    const vin = document.getElementById("vin").value.trim();
+
+    if (!vin) {
+        alert("Введите VIN.");
+        return;
+    }
+
+    if (vin.length < 11) {
+        alert("VIN выглядит слишком коротким.");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`
+        );
+
+        const data = await response.json();
+        const vehicle = data.Results[0];
+
+        if (!vehicle || !vehicle.Make || !vehicle.Model || !vehicle.ModelYear) {
+            alert("Не удалось распознать VIN.");
+            return;
+        }
+
+        document.getElementById("carModel").value =
+            `${vehicle.Make} ${vehicle.Model}`;
+        document.getElementById("year").value = vehicle.ModelYear;
+    } catch (error) {
+        console.error(error);
+        alert("Ошибка при декодировании VIN.");
+    }
+}
+function estimateRepair() {
+    const damage = document.getElementById("damageType").value;
+    const market = parseFloat(document.getElementById("marketPrice").value);
+
+    if (!damage || isNaN(market)) return;
+
+    let percent = 0;
+
+    if (damage === "Front End") percent = 0.15;
+    if (damage === "Rear End") percent = 0.10;
+    if (damage === "Side Damage") percent = 0.18;
+    if (damage === "Hail") percent = 0.08;
+    if (damage === "Flood") percent = 0.30;
+
+    const estimate = Math.round(market * percent);
+
+    document.getElementById("repairCost").value = estimate;
 }

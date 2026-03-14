@@ -196,3 +196,80 @@ td {
 .delete-btn:hover {
     opacity: 0.95;
 }
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.analytics-card {
+    background: #1a1f29;
+    border-radius: 14px;
+    padding: 20px;
+}
+
+.analytics-card h3 {
+    margin: 0 0 10px 0;
+    color: #b0b7c3;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.analytics-card p {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.chart-card {
+    background: #1a1f29;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.chart-card h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+.chart-card canvas {
+    width: 100% !important;
+    height: 320px !important;
+}
+
+th {
+    border-bottom: 1px solid #2a3240;
+}
+.vin-row {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+}
+
+.vin-row input {
+    flex: 1;
+}
+
+.vin-btn {
+    width: auto;
+    margin-top: 0;
+    padding: 0 18px;
+    background: #3498db;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.vin-btn:hover {
+    opacity: 0.95;
+}
+
+.chart-card canvas {
+    width: 100% !important;
+    height: 320px !important;
+}
