@@ -30,6 +30,9 @@ function calculate() {
     const profit = market - totalInvestment;
     const roi = (profit / totalInvestment) * 100;
 
+    const desiredProfit = parseFloat(document.getElementById("desiredProfit").value) || 0;
+    const maxBid = market - repair - fees - desiredProfit;
+
     let dealRating = "";
     let dealBadgeClass = "";
 
@@ -77,6 +80,7 @@ function calculate() {
             <strong>Deal Rating:</strong>
             <span class="badge ${dealBadgeClass}">${dealRating}</span>
         </div>
+        <div class="result-row"><strong>Safe Max Bid:</strong> $${maxBid.toLocaleString()}</div>
     `;
 
     const deal = {
@@ -376,4 +380,64 @@ function estimateRepair() {
     const estimate = Math.round(market * percent);
 
     document.getElementById("repairCost").value = estimate;
+}
+function estimateRepairWithAI() {
+    const notes = document.getElementById("damageNotes").value.trim();
+    const files = document.getElementById("damagePhotos").files;
+    const damageType = document.getElementById("damageType").value;
+    const marketPrice = parseFloat(document.getElementById("marketPrice").value) || 0;
+
+    if (!notes && files.length === 0) {
+        document.getElementById("aiEstimateResult").innerHTML =
+            "Please upload at least one photo or add damage notes.";
+        return;
+    }
+
+    let minEstimate = 0;
+    let maxEstimate = 0;
+    let confidence = "Medium";
+    let components = [];
+
+    if (damageType === "Front End") {
+        minEstimate = marketPrice * 0.12;
+        maxEstimate = marketPrice * 0.20;
+        components = ["front bumper", "headlights", "hood", "fender"];
+    } else if (damageType === "Rear End") {
+        minEstimate = marketPrice * 0.08;
+        maxEstimate = marketPrice * 0.15;
+        components = ["rear bumper", "trunk", "tail lights"];
+    } else if (damageType === "Side Damage") {
+        minEstimate = marketPrice * 0.15;
+        maxEstimate = marketPrice * 0.25;
+        components = ["doors", "side panels", "mirror", "paint work"];
+    } else if (damageType === "Hail") {
+        minEstimate = marketPrice * 0.05;
+        maxEstimate = marketPrice * 0.12;
+        components = ["roof", "hood", "trunk lid", "paintless dent repair"];
+    } else if (damageType === "Flood") {
+        minEstimate = marketPrice * 0.20;
+        maxEstimate = marketPrice * 0.40;
+        components = ["electrical system", "interior", "modules", "wiring"];
+        confidence = "Low";
+    } else if (damageType === "Mechanical") {
+        minEstimate = marketPrice * 0.10;
+        maxEstimate = marketPrice * 0.30;
+        components = ["engine components", "cooling system", "belts", "diagnostics"];
+        confidence = "Low";
+    } else {
+        minEstimate = marketPrice * 0.10;
+        maxEstimate = marketPrice * 0.18;
+        components = ["general body work", "inspection required"];
+    }
+
+    document.getElementById("aiEstimateResult").innerHTML = `
+        <strong>Approximate Repair Estimate by AI</strong><br><br>
+        <strong>Estimated damaged components:</strong><br>
+        ${components.map(item => `• ${item}`).join("<br>")}<br><br>
+        <strong>Estimated repair range:</strong><br>
+        $${Math.round(minEstimate).toLocaleString()} – $${Math.round(maxEstimate).toLocaleString()}<br><br>
+        <strong>Confidence:</strong> ${confidence}<br><br>
+        <strong>Notes:</strong><br>
+        This is an approximate AI-style estimate based on photos, notes, selected damage type, and market value. Hidden structural or internal damage may increase the final repair cost.
+    `;
 }

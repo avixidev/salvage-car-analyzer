@@ -51,7 +51,29 @@
             <label for="fees">Fees + Shipping ($)</label>
             <input type="number" id="fees" placeholder="e.g. 2000">
 
+            <label for="desiredProfit">Desired Profit ($)</label>
+            <input type="number" id="desiredProfit" placeholder="e.g. 4000">
+
             <button onclick="calculate()">Analyze Deal</button>
+        </div>
+
+        <div class="ai-card">
+            <h2>Approximate Repair Estimate by AI</h2>
+
+            <label for="damagePhotos">Upload Damage Photos</label>
+            <input type="file" id="damagePhotos" multiple accept="image/*">
+
+            <label for="damageNotes">Damage Notes</label>
+            <textarea
+                id="damageNotes"
+                placeholder="Example: front bumper cracked, left fender bent, headlight broken"
+            ></textarea>
+
+            <button type="button" onclick="estimateRepairWithAI()">Estimate with AI</button>
+
+            <div id="aiEstimateResult">
+                AI estimate will appear here.
+            </div>
         </div>
 
         <div class="result-card" id="result">
