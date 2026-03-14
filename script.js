@@ -381,11 +381,11 @@ function estimateRepair() {
 
     document.getElementById("repairCost").value = estimate;
 }
-function estimateRepairWithAI() {
+async function estimateRepairWithAI() {
     const notes = document.getElementById("damageNotes").value.trim();
-    const files = document.getElementById("damagePhotos").files;
     const damageType = document.getElementById("damageType").value;
     const marketPrice = parseFloat(document.getElementById("marketPrice").value) || 0;
+    const files = document.getElementById("damagePhotos").files;
 
     if (!notes && files.length === 0) {
         document.getElementById("aiEstimateResult").innerHTML =
@@ -393,51 +393,51 @@ function estimateRepairWithAI() {
         return;
     }
 
-    let minEstimate = 0;
-    let maxEstimate = 0;
-    let confidence = "Medium";
-    let components = [];
+    try {
+        const formData = new FormData();
+        formData.append("damageType", damageType);
+        formData.append("marketPrice", marketPrice);
+        formData.append("notes", notes);
 
-    if (damageType === "Front End") {
-        minEstimate = marketPrice * 0.12;
-        maxEstimate = marketPrice * 0.20;
-        components = ["front bumper", "headlights", "hood", "fender"];
-    } else if (damageType === "Rear End") {
-        minEstimate = marketPrice * 0.08;
-        maxEstimate = marketPrice * 0.15;
-        components = ["rear bumper", "trunk", "tail lights"];
-    } else if (damageType === "Side Damage") {
-        minEstimate = marketPrice * 0.15;
-        maxEstimate = marketPrice * 0.25;
-        components = ["doors", "side panels", "mirror", "paint work"];
-    } else if (damageType === "Hail") {
-        minEstimate = marketPrice * 0.05;
-        maxEstimate = marketPrice * 0.12;
-        components = ["roof", "hood", "trunk lid", "paintless dent repair"];
-    } else if (damageType === "Flood") {
-        minEstimate = marketPrice * 0.20;
-        maxEstimate = marketPrice * 0.40;
-        components = ["electrical system", "interior", "modules", "wiring"];
-        confidence = "Low";
-    } else if (damageType === "Mechanical") {
-        minEstimate = marketPrice * 0.10;
-        maxEstimate = marketPrice * 0.30;
-        components = ["engine components", "cooling system", "belts", "diagnostics"];
-        confidence = "Low";
-    } else {
-        minEstimate = marketPrice * 0.10;
-        maxEstimate = marketPrice * 0.18;
-        components = ["general body work", "inspection required"];
+        for (const file of files) {
+            formData.append("damagePhotos", file);
+        }
+
+        const response = await fetch("/estimate-ai", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+                document.getElementById("aiEstimateResult").innerHTML = `
+            <strong>Approximate Repair Estimate by AI</strong><br><br>
+
+            <strong>Uploaded images:</strong> ${data.uploaded_images}<br><br>
+
+            <strong>Selected damage type:</strong> ${damageType || "Not selected"}<br><br>
+
+            <strong>Approximate damage zone:</strong><br>
+            ${data.detected_areas && data.detected_areas.length
+                ? data.detected_areas.map(item => `• ${item}`).join("<br>")
+                : "• inspection required"}<br><br>
+
+            <strong>Likely damaged components:</strong><br>
+            ${data.components && data.components.length
+                ? data.components.map(item => `• ${item}`).join("<br>")
+                : "• inspection required"}<br><br>
+
+            <strong>Estimated repair range:</strong><br>
+            $${data.repair_range_min.toLocaleString()} – $${data.repair_range_max.toLocaleString()}<br><br>
+
+            <strong>Confidence:</strong> ${data.confidence}<br><br>
+
+            <strong>Important note:</strong><br>
+            This is an approximate AI-assisted estimate based on uploaded photos, selected damage type, market value, and user input. Hidden structural or internal damage may increase final cost.
+        `;
+    } catch (error) {
+        console.error(error);
+        document.getElementById("aiEstimateResult").innerHTML =
+            "Error getting AI estimate from backend.";
     }
-
-    document.getElementById("aiEstimateResult").innerHTML = `
-        <strong>Approximate Repair Estimate by AI</strong><br><br>
-        <strong>Estimated damaged components:</strong><br>
-        ${components.map(item => `• ${item}`).join("<br>")}<br><br>
-        <strong>Estimated repair range:</strong><br>
-        $${Math.round(minEstimate).toLocaleString()} – $${Math.round(maxEstimate).toLocaleString()}<br><br>
-        <strong>Confidence:</strong> ${confidence}<br><br>
-        <strong>Notes:</strong><br>
-        This is an approximate AI-style estimate based on photos, notes, selected damage type, and market value. Hidden structural or internal damage may increase the final repair cost.
-    `;
 }
