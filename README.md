@@ -164,3 +164,12 @@ Computer Information Systems student interested in AI, computer vision, and auto
 # License
 
 This project is for educational and portfolio purposes.
+
+# Aditional
+
+AI damage detection module implemented with YOLOv8.
+
+Due to cloud hosting limitations (GPU requirements),
+the full AI model is currently demonstrated locally.
+
+Deployment version includes the estimator and UI.
